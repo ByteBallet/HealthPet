@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,11 +22,12 @@ import android.widget.Toast;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.model.Points;
-import com.gus.hackaton.model.ProductInfo;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
+import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
@@ -55,9 +55,10 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     @BindView(R.id.questsRecyclerView)
     RecyclerView questsRecyclerView;
 
-	@BindView(R.id.scan_barcode)
+	@BindView(R.id.scanBarcodeButton)
 	Button scanBarcode;
-    @BindView(R.id.show_ar)
+	
+    @BindView(R.id.showAr)
     Button showAr;
 
 	@BindView(R.id.expanded_fridge_item)
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 	@BindView(R.id.mainContainer)
     View mainContainer;
+
+	@BindView(R.id.points)
+    TextView points;
 
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
@@ -80,13 +84,29 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 		setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
 
+        ApiService api = Api.getApi();
+        api.getPoints().enqueue(new Callback<Points>()
+        {
+            @Override
+            public void onResponse(Call<Points> call, Response<Points> response)
+            {
+                points.setText(String.valueOf(response.body().points));
+            }
+
+            @Override
+            public void onFailure(Call<Points> call, Throwable t)
+            {
+
+            }
+        });
+
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
             startActivity(myIntent);
         });
 
         showAr.setOnClickListener(v -> {
-            Intent myIntent = new Intent(MainActivity.this, AR_Activity.class);
+            Intent myIntent = new Intent(MainActivity.this, ARActivity.class);
             startActivity(myIntent);
         });
 
@@ -157,9 +177,13 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         }
     }
 
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    public void launchRanking(View view) {
+	    startActivity(new Intent(this, RankingActivity.class));
+    }
 }
