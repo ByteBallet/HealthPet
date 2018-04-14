@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,17 +23,11 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.fridge.FridgeAdapter;
-import com.gus.hackaton.model.Points;
-import com.gus.hackaton.model.ProductInfo;
-import com.gus.hackaton.net.Api;
-import com.gus.hackaton.net.ApiService;
+import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
@@ -47,7 +40,6 @@ import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
     public static final int CAMERA_PERMISSION = 101;
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.badgesRecyclerView)
     RecyclerView badgesRecyclerView;
@@ -55,19 +47,14 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     @BindView(R.id.questsRecyclerView)
     RecyclerView questsRecyclerView;
 
-	@BindView(R.id.scan_barcode)
+	@BindView(R.id.scanBarcodeButton)
 	Button scanBarcode;
-    @BindView(R.id.show_ar)
-    Button showAr;
 
 	@BindView(R.id.expanded_fridge_item)
     View expandedFridgeItem;
 
 	@BindView(R.id.mainContainer)
     View mainContainer;
-
-	@BindView(R.id.test_button)
-    Button testButton;
 
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
@@ -88,11 +75,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             startActivity(myIntent);
         });
 
-        showAr.setOnClickListener(v -> {
-            Intent myIntent = new Intent(MainActivity.this, AR_Activity.class);
-            startActivity(myIntent);
-        });
-
 		getSupportFragmentManager()
 				.beginTransaction()
 				.replace(R.id.heroContainer, new HeroFragment())
@@ -110,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         layoutManager.setFlexWrap(FlexWrap.WRAP);
 
         badgesRecyclerView.setLayoutManager(layoutManager);
-
 
 
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
@@ -161,9 +142,13 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         }
     }
 
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    public void launchRanking(View view) {
+	    startActivity(new Intent(this, RankingActivity.class));
+    }
 }
