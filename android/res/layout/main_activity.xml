@@ -14,8 +14,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp">
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
@@ -34,5 +33,12 @@
         app:layout_constraintVertical_bias="0.503">
 
     </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/scan_barcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scan barcode"
+        app:layout_constraintEnd_toEndOf="@id/fridgeRecyclerView"/>
 
 </android.support.constraint.ConstraintLayout>
