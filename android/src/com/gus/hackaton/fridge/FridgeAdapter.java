@@ -27,7 +27,7 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
     public FridgeAdapter(List<FridgeItem> fridgeItemList, OnFridgeItemClicked onFridgeItemClicked) {
         this.fridgeItemList = fridgeItemList;
 
-        this.onItemClicked = (position, view) -> onFridgeItemClicked.onClick(fridgeItemList.get(position), view);
+        this.onItemClicked = position -> onFridgeItemClicked.onClick(fridgeItemList.get(position));
 
         notifyDataSetChanged();
     }
@@ -73,7 +73,7 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
             imageView.setPadding(20, 20, 20, 20);
             imageView.setImageResource(fridgeItem.getDrawableRes());
 
-            imageView.setOnClickListener(v -> onItemClicked.onClick(position, v));
+            imageView.setOnClickListener(v -> onItemClicked.onClick(position));
 
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
@@ -90,11 +90,11 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
 
     private interface OnItemClicked {
 
-        void onClick(int position, View view);
+        void onClick(int position);
     }
 
     public interface OnFridgeItemClicked {
-        void onClick(FridgeItem fridgeItem, View view);
+        void onClick(FridgeItem fridgeItem);
     }
 
 

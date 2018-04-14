@@ -13,20 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.gus.hackaton.fridge.FridgeAdapter;
-import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_BADGE_LIST;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
+import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -35,23 +32,15 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     public static final int CAMERA_PERMISSION = 101;
 
-    @BindView(R.id.badgesRecyclerView)
-    RecyclerView badgesRecyclerView;
-
-    @BindView(R.id.questsRecyclerView)
-    RecyclerView questsRecyclerView;
+    @BindView(R.id.fridgeRecyclerView)
+    RecyclerView recyclerView;
 
 	@BindView(R.id.scan_barcode)
 	Button scanBarcode;
+    @BindView(R.id.show_ar)
+    Button showAr;
 
-	@BindView(R.id.expanded_fridge_item)
-    View expandedFridgeItem;
-
-	@BindView(R.id.mainContainer)
-    View mainContainer;
-
-    private FridgeAdapter badgesAdapter;
-    private FridgeAdapter questsAdapter;
+    private FridgeAdapter fridgeAdapter;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,34 +58,28 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             startActivity(myIntent);
         });
 
+        showAr.setOnClickListener(v -> {
+            Intent myIntent = new Intent(MainActivity.this, AR_Activity.class);
+            startActivity(myIntent);
+        });
+
 		getSupportFragmentManager()
 				.beginTransaction()
 				.replace(R.id.heroContainer, new HeroFragment())
 				.commit();
 
-		setupRecyclerViews();
+		setupRecyclerView();
 	}
 
-    private void setupRecyclerViews() {
+    private void setupRecyclerView() {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        badgesRecyclerView.setHasFixedSize(true);
-        badgesRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.HORIZONTAL, false));
+        fridgeAdapter = new FridgeAdapter(DUMMY_LIST,
+                fridgeItem -> Toast.makeText(this, "fridgeItem " + fridgeItem, Toast.LENGTH_SHORT).show());
 
-        FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = (fridgeItem, view) ->
-                ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
-
-
-        badgesAdapter = new FridgeAdapter(DUMMY_BADGE_LIST, onFridgeItemClicked);
-
-        badgesRecyclerView.setAdapter(badgesAdapter);
-
-
-        questsRecyclerView.setHasFixedSize(true);
-        questsRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
-        questsAdapter = new FridgeAdapter(DUMMY_QUEST_LIST, onFridgeItemClicked);
-
-        questsRecyclerView.setAdapter(questsAdapter);
+        recyclerView.setAdapter(fridgeAdapter);
 
     }
 
