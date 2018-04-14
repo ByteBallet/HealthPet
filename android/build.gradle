@@ -70,6 +70,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'me.dm7.barcodescanner:zbar:1.9.8'
     implementation 'com.github.google:cameraview:d0b508a5ea'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
 }
 
@@ -136,8 +139,7 @@ eclipse {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
     }
-
-    classpath {plusConfigurations += [ project.configurations.compile]
+        classpath {plusConfigurations +=[ project.configurations.compile]
         containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'
     }
 
