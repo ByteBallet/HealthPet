@@ -1,8 +1,13 @@
 package com.gus.hackaton.net;
 
+import com.google.gson.JsonObject;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.ProductInfo;
-import com.gus.hackaton.model.Quiz;
+import com.gus.hackaton.ranking.RankingItem;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -21,6 +26,6 @@ public interface ApiService
     @POST("/api/user/points")
     Call<Void> addPoints(@Body Points points);
 
-    @GET("/api/quiz/")
-    Call<Quiz> getQuiz();
+    @GET("/api/user/ranking")
+    Call<JsonObject> getRanking();
 }
