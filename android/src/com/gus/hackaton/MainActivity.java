@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,22 +25,17 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.fridge.FridgeAdapter;
-import com.gus.hackaton.model.Points;
-import com.gus.hackaton.net.Api;
-import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_BADGE_LIST;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
+import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
+import static com.gus.hackaton.utils.Utils.DUMMY_BADGE_LIST;
+import static com.gus.hackaton.utils.Utils.DUMMY_QUEST_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -67,9 +63,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 	@BindView(R.id.mainContainer)
     View mainContainer;
 
-	@BindView(R.id.points)
-    TextView points;
-
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 
@@ -83,22 +76,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 		setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
-
-        ApiService api = Api.getApi();
-        api.getPoints().enqueue(new Callback<Points>()
-        {
-            @Override
-            public void onResponse(Call<Points> call, Response<Points> response)
-            {
-                points.setText(String.valueOf(response.body().points));
-            }
-
-            @Override
-            public void onFailure(Call<Points> call, Throwable t)
-            {
-
-            }
-        });
 
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
@@ -183,7 +160,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @OnClick(R.id.rankingButton)
     public void launchRanking(View view) {
-	    startActivity(new Intent(this, RankingActivity.class));
+        Log.d(TAG, "launchRanking: ");
+        startActivity(new Intent(MainActivity.this, RankingActivity.class));
     }
 }
