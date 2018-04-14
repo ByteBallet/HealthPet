@@ -1,31 +1,40 @@
 package com.gus.hackaton;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 
 import static com.badlogic.gdx.math.MathUtils.sin;
 
 public class HeroGame extends ApplicationAdapter {
 
-    // ZOOM:
-    static final float MAX_ZOOM = 0.07f;
-    static final float MIN_ZOOM = -0.08f;
+    private ShapeRenderer shapeRenderer;
 
-    private MyCameraInputController cameraInputController;
+    private CameraInputController cameraInputController;
 
     // models:
     private ModelBatch modelBatch;
     private Array<ModelInstance> modelInstances = new Array<ModelInstance>();
+
+    private SpriteBatch spriteBatch;
+
+	private Texture texture;
 
     private PerspectiveCamera perspectiveCamera;
 
@@ -39,6 +48,8 @@ public class HeroGame extends ApplicationAdapter {
     @Override
 	public void create() {
         acc = 0;
+		spriteBatch = new SpriteBatch();
+		texture = new Texture("badlogic.jpg");
 
         // LIGHTING, DIRECTIONAL LIGHT https://i.stack.imgur.com/3udUJ.gif
         environment = new Environment();
@@ -49,19 +60,15 @@ public class HeroGame extends ApplicationAdapter {
 		perspectiveCamera = new PerspectiveCamera(80, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		perspectiveCamera.position.set((float) 1.23333, 0, 0);
         perspectiveCamera.lookAt(0,0,0);
-        perspectiveCamera.near = 0.01f;
+        perspectiveCamera.near = 1f;
         perspectiveCamera.far = 300f;
         perspectiveCamera.update();
 
-
         modelBatch = new ModelBatch();
 
-        cameraInputController = new MyCameraInputController(perspectiveCamera);
-
         // MOVING THE CAMERA:
+        cameraInputController = new CameraInputController(perspectiveCamera);
         Gdx.input.setInputProcessor(cameraInputController);
-
-
 
         // CARROT:
         assetManager = new AssetManager();
@@ -87,6 +94,10 @@ public class HeroGame extends ApplicationAdapter {
 
         cameraInputController.update();
 
+		spriteBatch.begin();
+		spriteBatch.draw(texture, 0, 0);
+		spriteBatch.end();
+
         modelBatch.begin(perspectiveCamera);
         modelBatch.render(modelInstances, environment);
         modelBatch.end();
@@ -101,10 +112,12 @@ public class HeroGame extends ApplicationAdapter {
 
     @Override
 	public void dispose() {
+		spriteBatch.dispose();
         modelBatch.dispose();
 
-        modelInstances.clear();
+        texture.dispose();
 
+        modelInstances.clear();
         assetManager.dispose();
 	}
 
