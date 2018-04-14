@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 	@BindView(R.id.scan_barcode)
 	Button scanBarcode;
-    @BindView(R.id.show_ar)
-    Button showAr;
 
 	@BindView(R.id.expanded_fridge_item)
     View expandedFridgeItem;
@@ -76,11 +74,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             startActivity(myIntent);
         });
 
-        showAr.setOnClickListener(v -> {
-            Intent myIntent = new Intent(MainActivity.this, AR_Activity.class);
-            startActivity(myIntent);
-        });
-
 		getSupportFragmentManager()
 				.beginTransaction()
 				.replace(R.id.heroContainer, new HeroFragment())
@@ -98,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         layoutManager.setFlexWrap(FlexWrap.WRAP);
 
         badgesRecyclerView.setLayoutManager(layoutManager);
-
 
 
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
