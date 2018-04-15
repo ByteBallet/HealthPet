@@ -36,8 +36,4 @@ public final class FridgeItem {
                 ", fridgeType=" + fridgeType +
                 '}';
     }
-
-    public FridgeItem copy(FridgeType fridgeType) {
-        return new FridgeItem(this.description, fridgeType, this.drawableRes);
-    }
 }
