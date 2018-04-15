@@ -24,15 +24,4 @@ public class NutricalInfo
     @SerializedName("protein")
     @Expose
     public double protein;
-
-    @Override
-    public String toString() {
-        return "NutricalInfo{" +
-                "calories=" + calories +
-                ", fat=" + fat +
-                ", carbohydrate=" + carbohydrate +
-                ", sugar=" + sugar +
-                ", protein=" + protein +
-                '}';
-    }
 }

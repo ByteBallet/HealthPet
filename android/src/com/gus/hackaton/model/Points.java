@@ -13,11 +13,4 @@ public class Points
     public Points(int p){
         points = p;
     }
-
-    @Override
-    public String toString() {
-        return "Points{" +
-                "points=" + points +
-                '}';
-    }
 }

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.R;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,10 +28,12 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
 
     private final OnItemClicked onItemClicked;
 
-    public FridgeAdapter(OnFridgeItemClicked onFridgeItemClicked) {
-        this.fridgeItemList = Collections.emptyList();
+    public FridgeAdapter(List<FridgeItem> fridgeItemList, OnFridgeItemClicked onFridgeItemClicked) {
+        this.fridgeItemList = fridgeItemList;
 
         this.onItemClicked = (position, view) -> onFridgeItemClicked.onClick(fridgeItemList.get(position), view);
+
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -61,12 +62,6 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
         return fridgeItemList.size();
     }
 
-    public void invalidateData(List<FridgeItem> fridgeItems) {
-        if (fridgeItems != null) {
-            this.fridgeItemList = fridgeItems;
-            notifyDataSetChanged();
-        }
-    }
 
     public List<FridgeItem> getData() {
         return fridgeItemList;

@@ -20,11 +20,10 @@ public interface ApiService
     Call<Points> getPoints();
 
     @POST("/api/user/points")
-    Call<Void> addPoints(@Body Points points);
+    Call<Points> addPoints(@Body Points points);
 
     @GET("/api/quiz/")
     Call<Quiz> getQuiz();
-
     @GET("/api/user/ranking")
     Call<JsonObject> getRanking();
 }
